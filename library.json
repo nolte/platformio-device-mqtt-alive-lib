@@ -1,7 +1,7 @@
 {
-	"name": "IRremote",
-	"keywords": "infrared, ir, remote",
-	"description": "Send and receive infrared signals with multiple protocols",
+	"name": "MQTT Device Alive",
+	"keywords": "mqtt, monitoring, alive",
+	"description": "Send all 30 seconds a JSon Message",
 	"include": "src/*.h",
 	"examples": ["[Ee]xamples/*/*.ino"],
 	"dependencies": [
