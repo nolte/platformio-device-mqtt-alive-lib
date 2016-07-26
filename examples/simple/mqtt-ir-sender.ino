@@ -1,5 +1,5 @@
 /**
- Receiving IR Commands and send the Command to a MQTT Topic
+ * 
  */
 #include <SPI.h>
 #include <Ethernet.h>
@@ -7,14 +7,21 @@
 #include <DeviceAliveMessage.h>
 #include <MQTTDeviceAlive.h>
 
+// fall back for missing build attributes
+#ifndef MQTTDEVICEID
+	#define MQTTDEVICEID "id-not-set"
+#endif
+
+#ifndef MQTTHOST
+	#define MQTTHOST "dummyMQTTHost"
+#endif
+
 // MAC Adresse des Ethernet Shields
 byte mac[] = { 0xDE, 0xED, 0xBA, 0xFE, 0xFE, 0xFF };
 
 IPAddress ip(192, 168, 178, 4);
 
-// IP des MQTT Servers
-IPAddress server(192, 168, 178, 63);
-char DEVICE_ID[] = "ir-dummmy";
+char DEVICE_ID[] = MQTTDEVICEID;
 
 // Callback function header
 void callback(char* topic, byte* payload, unsigned int length);
@@ -43,7 +50,7 @@ boolean reconnect() {
 void setup() {
 	Serial.begin(9600);
 
-	mqttClient.setServer(server, 1883);
+	mqttClient.setServer(MQTTHOST, 1883);
 	Ethernet.begin(mac, ip);
 	// Allow the hardware to sort itself out
 	delay(2500);
