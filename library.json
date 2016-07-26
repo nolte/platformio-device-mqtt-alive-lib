@@ -1,0 +1,19 @@
+{
+	"name": "IRremote",
+	"keywords": "infrared, ir, remote",
+	"description": "Send and receive infrared signals with multiple protocols",
+	"include": "src/*.h",
+	"examples": ["[Ee]xamples/*/*.ino"],
+	"dependencies": [
+		{
+			"name": "Json",
+			"frameworks": "arduino"
+		},
+		{
+			"name": "PubSubClient",
+			"frameworks": "arduino"
+		}
+	],
+	"frameworks": "arduino",
+	"platforms": "atmelavr"
+}
