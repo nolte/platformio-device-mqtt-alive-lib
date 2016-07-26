@@ -11,12 +11,10 @@ class MQTTDeviceAlive
 {
   public:
 	MQTTDeviceAlive(DeviceAliveMessage message, PubSubClient mqttClient);
-    void doALiveCheckMessage(long currentMillis);
+    void doALiveCheckMessage();
   private:
     DeviceAliveMessage _message;
     PubSubClient _mqttClient;
-    long _previousMillis;
-    long _interval;
     String _mqtt_health_check_path;
 };
 

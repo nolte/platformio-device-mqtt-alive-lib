@@ -10,43 +10,68 @@
 // MAC Adresse des Ethernet Shields
 byte mac[] = { 0xDE, 0xED, 0xBA, 0xFE, 0xFE, 0xFF };
 
-IPAddress ip(192, 168, 178, 75);
+IPAddress ip(192, 168, 178, 4);
 
 // IP des MQTT Servers
-char server[] = "maxchen";
-char DEVICE_ID[] = "ir-sender-livingroom";
+IPAddress server(192, 168, 178, 63);
+char DEVICE_ID[] = "ir-dummmy";
 
 // Callback function header
 void callback(char* topic, byte* payload, unsigned int length);
-EthernetClient apiClient;
-PubSubClient mqttClient(server, 1883, callback, apiClient);
+EthernetClient ethClient;
+PubSubClient mqttClient(ethClient);
 
-// char *features[] = { "testmessage", "testmessage2",  "testmessage3"};
-DeviceAliveMessage deviceAliveMessage(String(DEVICE_ID), ip);
+
+const char *features[] = { "featureA", "featureB", "featureC" };
+DeviceAliveMessage deviceAliveMessage(String(DEVICE_ID), ip,features);
 MQTTDeviceAlive mqttDeviceAlive(deviceAliveMessage, mqttClient);
+
+const long _interval = 10000;
+unsigned long previousMillis = 0;
+
+
+long lastReconnectAttempt = 0;
+
+boolean reconnect() {
+  if (mqttClient.connect(DEVICE_ID)) {
+    // Once connected, publish an announcement...
+	  mqttDeviceAlive.doALiveCheckMessage();
+  }
+  return mqttClient.connected();
+}
 
 void setup() {
 	Serial.begin(9600);
+
+	mqttClient.setServer(server, 1883);
 	Ethernet.begin(mac, ip);
 	// Allow the hardware to sort itself out
 	delay(2500);
-	if (mqttClient.connect(DEVICE_ID)) {
-		Serial.println("Connected");
-	} else {
-		Serial.println("Not Connected");
-	}
+	Serial.println("Try To Start");
 	Serial.println("Start MQTT Alive Check");
-	unsigned long currentMillis = millis();
-	mqttDeviceAlive.doALiveCheckMessage(currentMillis);
+	lastReconnectAttempt = 0;
 }
 
 void loop() {
-	unsigned long currentMillis = millis();
-	mqttDeviceAlive.doALiveCheckMessage(currentMillis);
-	mqttClient.loop();
+	long now = millis();
+	if (!mqttClient.connected()) {
+		// reconnect to the broker
+		if (now - lastReconnectAttempt > 5000) {
+			lastReconnectAttempt = now;
+			// Attempt to reconnect
+			if (reconnect()) {
+				lastReconnectAttempt = 0;
+			}
+		}
+	} else {
+		// Client connected
+		if (now - previousMillis > _interval) {
+			previousMillis = now;
+			// Attempt to reconnect
+			mqttDeviceAlive.doALiveCheckMessage();
+		}
+		
+		
+		mqttClient.loop();
+	}
 }
-
-void callback(char* topic, byte* payload, unsigned int length) {
-	Serial.println("Start MQTT IR Sender Hub");
-}
-

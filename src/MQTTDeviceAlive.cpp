@@ -9,14 +9,11 @@ MQTTDeviceAlive::MQTTDeviceAlive(DeviceAliveMessage message, PubSubClient mqttCl
 {
   _message = message;
   _mqttClient = mqttClient;
-  _interval = 30000;
   _mqtt_health_check_path = "/iot/devices";
 }
 
-void MQTTDeviceAlive::doALiveCheckMessage(long currentMillis)
+void MQTTDeviceAlive::doALiveCheckMessage()
 {
-	 if (currentMillis - _previousMillis >= _interval) {
-		 _previousMillis = currentMillis;
 		 // Length (with one extra character for the null terminator)
 		 int str_len = _mqtt_health_check_path.length() + 1;
 		 // Prepare the character array (the buffer)
@@ -26,6 +23,5 @@ void MQTTDeviceAlive::doALiveCheckMessage(long currentMillis)
 		 char* jsonMessage =  _message.toJson();
 		 char test[] = "/iot/devices";
 		 _mqttClient.publish(test,jsonMessage);
-	 }
 }
 

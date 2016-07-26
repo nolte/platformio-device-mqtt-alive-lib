@@ -17,19 +17,27 @@ DeviceAliveMessage::DeviceAliveMessage()
 	// Serial.println("DeviceAliveMessage default");
 }
 
-DeviceAliveMessage::DeviceAliveMessage(String deviceId,IPAddress ip)
+DeviceAliveMessage::DeviceAliveMessage(String deviceId,IPAddress ip,const char** features )
 {
   _deviceId = deviceId;
   _ip = ip;
+  _features=features;
 }
 
 char *DeviceAliveMessage::toJson()
 {
 	//  Serial.println("toJson");
-	StaticJsonBuffer<200> jsonBuffer;
+	StaticJsonBuffer<500> jsonBuffer;
 	JsonObject& root = jsonBuffer.createObject();
 	root["id"] = _deviceId;
 	root["ip"] = DisplayAddress(_ip);
+
+
+	JsonArray& data = root.createNestedArray("features");
+	for (int i = 0; i <= sizeof(_features); i++){
+		data.add(_features[i]);
+	}
+
 	String jsonString = "";
 	root.printTo(jsonString);
 	int commandLenJson = jsonString.length() + 1;

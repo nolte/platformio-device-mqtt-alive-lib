@@ -10,11 +10,12 @@ class DeviceAliveMessage
 {
   public:
 	DeviceAliveMessage();
-	DeviceAliveMessage(String deviceId, IPAddress ip);
+	DeviceAliveMessage(String deviceId, IPAddress ip,const char** features );
 	char * toJson();
   private:
     String _deviceId;
     IPAddress _ip;
+    const char ** _features;
 };
 
 #endif
