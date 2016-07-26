@@ -3,7 +3,13 @@
 	"keywords": "mqtt, monitoring, alive",
 	"description": "Send all 30 seconds a JSon Message",
 	"include": "src/*.h",
-	"examples": ["[Ee]xamples/*/*.ino"],
+	"examples": [
+		"[Ee]xamples/*/*.ino"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nolte/platformio-device-mqtt-alive-lib.git"
+	},
 	"dependencies": [
 		{
 			"name": "Json",
