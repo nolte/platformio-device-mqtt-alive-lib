@@ -24,7 +24,7 @@ DeviceAliveMessage::DeviceAliveMessage(String deviceId,IPAddress ip, char *featu
   *_features = *features;
 }
 
-void DeviceAliveMessage::toJson()
+char *DeviceAliveMessage::toJson()
 {
 	Serial.println("toJson");
 	StaticJsonBuffer<200> jsonBuffer;

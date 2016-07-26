@@ -17,6 +17,7 @@ class MQTTDeviceAlive
     PubSubClient _mqttClient;
     long _previousMillis;
     long _interval;
+    String _mqtt_health_check_path;
 };
 
 #endif

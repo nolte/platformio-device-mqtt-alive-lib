@@ -11,7 +11,7 @@ class DeviceAliveMessage
   public:
 	DeviceAliveMessage();
 	DeviceAliveMessage(String deviceId, IPAddress ip,char *features[]);
-    void toJson();
+	char * toJson();
   private:
     String _deviceId;
     IPAddress _ip;
