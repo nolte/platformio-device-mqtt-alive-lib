@@ -14,19 +14,18 @@ String DisplayAddress(IPAddress address)
 
 DeviceAliveMessage::DeviceAliveMessage()
 {
-	Serial.println("DeviceAliveMessage default");
+	// Serial.println("DeviceAliveMessage default");
 }
 
-DeviceAliveMessage::DeviceAliveMessage(String deviceId,IPAddress ip, char *features[])
+DeviceAliveMessage::DeviceAliveMessage(String deviceId,IPAddress ip)
 {
   _deviceId = deviceId;
   _ip = ip;
-  *_features = *features;
 }
 
 char *DeviceAliveMessage::toJson()
 {
-	Serial.println("toJson");
+	//  Serial.println("toJson");
 	StaticJsonBuffer<200> jsonBuffer;
 	JsonObject& root = jsonBuffer.createObject();
 	root["id"] = _deviceId;
@@ -36,8 +35,6 @@ char *DeviceAliveMessage::toJson()
 	int commandLenJson = jsonString.length() + 1;
 	char message_buffCommandJson[commandLenJson];
 	jsonString.toCharArray(message_buffCommandJson, commandLenJson);
-
-	//result message ->>>> message_buffCommandJson
-
+    return message_buffCommandJson;
 }
 

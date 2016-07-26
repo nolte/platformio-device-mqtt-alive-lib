@@ -16,7 +16,6 @@ MQTTDeviceAlive::MQTTDeviceAlive(DeviceAliveMessage message, PubSubClient mqttCl
 void MQTTDeviceAlive::doALiveCheckMessage(long currentMillis)
 {
 	 if (currentMillis - _previousMillis >= _interval) {
-		 Serial.println("doALiveCheckMessage");
 		 _previousMillis = currentMillis;
 		 // Length (with one extra character for the null terminator)
 		 int str_len = _mqtt_health_check_path.length() + 1;
@@ -25,7 +24,8 @@ void MQTTDeviceAlive::doALiveCheckMessage(long currentMillis)
 		 // Copy it over
 		 _mqtt_health_check_path.toCharArray(char_array, str_len);
 		 char* jsonMessage =  _message.toJson();
-		 _mqttClient.publish(char_array,jsonMessage);
+		 char test[] = "/iot/devices";
+		 _mqttClient.publish(test,jsonMessage);
 	 }
 }
 
