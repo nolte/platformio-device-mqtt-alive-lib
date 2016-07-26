@@ -5,19 +5,18 @@
 #include <SPI.h>
 #include <Ethernet.h>
 #include <PubSubClient.h>
+#include <DeviceAliveMessage.h>
 
 class MQTTDeviceAlive
 {
   public:
-	MQTTDeviceAlive(String deviceId, IPAddress ip, PubSubClient mqttClient);
+	MQTTDeviceAlive(DeviceAliveMessage message, PubSubClient mqttClient);
     void doALiveCheckMessage(long currentMillis);
   private:
-    String _deviceId;
-    IPAddress _ip;
+    DeviceAliveMessage _message;
     PubSubClient _mqttClient;
     long _previousMillis;
     long _interval;
-	String DisplayAddress(IPAddress address);
 };
 
 #endif

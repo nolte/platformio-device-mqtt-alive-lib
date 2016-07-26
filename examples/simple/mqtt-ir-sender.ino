@@ -4,7 +4,9 @@
 #include <SPI.h>
 #include <Ethernet.h>
 #include <PubSubClient.h>
+#include <DeviceAliveMessage.h>
 #include <MQTTDeviceAlive.h>
+
 
 
 // MAC Adresse des Ethernet Shields
@@ -21,7 +23,9 @@ void callback(char* topic, byte* payload, unsigned int length);
 EthernetClient apiClient;
 PubSubClient mqttClient(server, 1883, callback, apiClient);
 
-MQTTDeviceAlive mqttDeviceAlive(String(DEVICE_ID),ip, mqttClient);
+char *features[] = { "testmessage", "testmessage2",  "testmessage3"};
+DeviceAliveMessage deviceAliveMessage(String(DEVICE_ID),ip,features);
+MQTTDeviceAlive mqttDeviceAlive(deviceAliveMessage, mqttClient);
 
 void setup() {
   Serial.begin(9600);
@@ -39,7 +43,7 @@ void setup() {
 
 void loop() {
   unsigned long currentMillis = millis();
-  mqttDeviceAlive.doALiveCheckMessage(currentMillis);
+  // mqttDeviceAlive.doALiveCheckMessage(currentMillis);
   mqttClient.loop();
 }
 
