@@ -4,6 +4,10 @@
 #include <ArduinoJson.h>
 #include <DeviceAliveMessage.h>
 
+#if !defined(ARRAY_SIZE)
+    #define ARRAY_SIZE(x) (sizeof((x)) / sizeof((x)[0]))
+#endif
+
 String DisplayAddress(IPAddress address)
 {
   return String(address[0]) + "." +
@@ -17,11 +21,12 @@ DeviceAliveMessage::DeviceAliveMessage()
 	// Serial.println("DeviceAliveMessage default");
 }
 
-DeviceAliveMessage::DeviceAliveMessage(String deviceId,IPAddress ip,const char** features )
+DeviceAliveMessage::DeviceAliveMessage(String deviceId,IPAddress ip,const char** features, int feature_array_size )
 {
   _deviceId = deviceId;
   _ip = ip;
   _features=features;
+  _feature_array_size=feature_array_size;
 }
 
 char *DeviceAliveMessage::toJson()
@@ -32,9 +37,8 @@ char *DeviceAliveMessage::toJson()
 	root["id"] = _deviceId;
 	root["ip"] = DisplayAddress(_ip);
 
-
 	JsonArray& data = root.createNestedArray("features");
-	for (int i = 0; i <= sizeof(_features); i++){
+	for (int i = 0; i < _feature_array_size ; i++){
 		data.add(_features[i]);
 	}
 

@@ -7,33 +7,33 @@
 #include <DeviceAliveMessage.h>
 #include <MQTTDeviceAlive.h>
 
-// fall back for missing build attributes
 #ifndef MQTTDEVICEID
-	#define MQTTDEVICEID "id-not-set"
+	#define MQTTDEVICEID "fooo"
 #endif
 
-#ifndef MQTTHOST
-	#define MQTTHOST "dummyMQTTHost"
+#if !defined(ARRAY_SIZE)
+    #define ARRAY_SIZE(x) (sizeof((x)) / sizeof((x)[0]))
 #endif
+
 
 // MAC Adresse des Ethernet Shields
 byte mac[] = { 0xDE, 0xED, 0xBA, 0xFE, 0xFE, 0xFF };
-
+// Device IP Address
 IPAddress ip(192, 168, 178, 4);
-
+// IP des MQTT Servers
+IPAddress mqttBroker(192, 168, 178, 63);
+// using build parameter for mqtt device id
 char DEVICE_ID[] = MQTTDEVICEID;
 
-// Callback function header
-void callback(char* topic, byte* payload, unsigned int length);
 EthernetClient ethClient;
 PubSubClient mqttClient(ethClient);
 
+const char *features[] = { "ir-command-receiving" };
 
-const char *features[] = { "featureA", "featureB", "featureC" };
-DeviceAliveMessage deviceAliveMessage(String(DEVICE_ID), ip,features);
+DeviceAliveMessage deviceAliveMessage(String(DEVICE_ID), ip,features,ARRAY_SIZE(features));
 MQTTDeviceAlive mqttDeviceAlive(deviceAliveMessage, mqttClient);
 
-const long _interval = 10000;
+const long _interval = 5000;
 unsigned long previousMillis = 0;
 
 
@@ -50,7 +50,7 @@ boolean reconnect() {
 void setup() {
 	Serial.begin(9600);
 
-	mqttClient.setServer(MQTTHOST, 1883);
+	mqttClient.setServer(mqttBroker, 1883);
 	Ethernet.begin(mac, ip);
 	// Allow the hardware to sort itself out
 	delay(2500);
@@ -72,11 +72,14 @@ void loop() {
 		}
 	} else {
 		// Client connected
+		// time to send the alive message
 		if (now - previousMillis > _interval) {
 			previousMillis = now;
 			// Attempt to reconnect
 			mqttDeviceAlive.doALiveCheckMessage();
 		}
+		
+		//Receiving 
 		
 		
 		mqttClient.loop();
