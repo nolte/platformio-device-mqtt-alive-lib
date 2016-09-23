@@ -51,7 +51,7 @@ void setup() {
 
 void loop() {
 	long now = millis();
-	if (!mqttClient.connected(DEVICE_ID)) {
+	if (!mqttClient.connected()) {
 		// reconnect to the broker
 		if (now - lastReconnectAttempt > 5000) {
 			lastReconnectAttempt = now;
