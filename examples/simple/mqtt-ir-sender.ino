@@ -30,7 +30,7 @@ unsigned long previousMillis = 0;
 long lastReconnectAttempt = 0;
 
 boolean reconnect() {
-  if (mqttClient.connect(DEVICE_ID)) {
+  if (mqttClient.connect()) {
     // Once connected, publish an announcement...
 	  aliveMessage.sendAliveMessage(ip);
   }
