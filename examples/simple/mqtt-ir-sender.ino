@@ -4,16 +4,7 @@
 #include <SPI.h>
 #include <Ethernet.h>
 #include <PubSubClient.h>
-#include <DeviceAliveMessage.h>
-#include <MQTTDeviceAlive.h>
-
-#ifndef MQTTDEVICEID
-	#define MQTTDEVICEID "fooo"
-#endif
-
-#if !defined(ARRAY_SIZE)
-    #define ARRAY_SIZE(x) (sizeof((x)) / sizeof((x)[0]))
-#endif
+#include <MqttDeviceAlliveMessage.h>
 
 
 // MAC Adresse des Ethernet Shields
@@ -28,11 +19,10 @@ char DEVICE_ID[] = MQTTDEVICEID;
 EthernetClient ethClient;
 PubSubClient mqttClient(ethClient);
 
+char MQTT_A_LIVE_TOPIC[] = "/iot/devices";
 const char *features[] = { "ir-command-receiving" };
 
-DeviceAliveMessage deviceAliveMessage(String(DEVICE_ID), ip,features,ARRAY_SIZE(features));
-MQTTDeviceAlive mqttDeviceAlive(deviceAliveMessage, mqttClient);
-
+MqttDeviceAlliveMessage aliveMessage(mqttClient,MQTT_A_LIVE_TOPIC,DEVICE_ID,features);
 const long _interval = 5000;
 unsigned long previousMillis = 0;
 
@@ -42,7 +32,7 @@ long lastReconnectAttempt = 0;
 boolean reconnect() {
   if (mqttClient.connect(DEVICE_ID)) {
     // Once connected, publish an announcement...
-	  mqttDeviceAlive.doALiveCheckMessage();
+	  aliveMessage.sendAliveMessage(ip);
   }
   return mqttClient.connected();
 }
@@ -71,15 +61,8 @@ void loop() {
 			}
 		}
 	} else {
-		// Client connected
-		// time to send the alive message
-		if (now - previousMillis > _interval) {
-			previousMillis = now;
-			// Attempt to reconnect
-			mqttDeviceAlive.doALiveCheckMessage();
-		}
 		
-		//Receiving 
+		aliveMessage.sendAliveMessage(ip);
 		
 		
 		mqttClient.loop();
