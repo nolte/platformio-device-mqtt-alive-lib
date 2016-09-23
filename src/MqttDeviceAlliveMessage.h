@@ -7,7 +7,7 @@ class MqttDeviceAlliveMessage
 {
 	public:
 	  MqttDeviceAlliveMessage(PubSubClient client,const char* mqtt_topic,char* device_id);
-	  MqttDeviceAlliveMessage(PubSubClient client,const char* mqtt_topic,char* device_id,const char** features);
+	  MqttDeviceAlliveMessage(PubSubClient client,const char* mqtt_topic,char* device_id,const char** features,int feature_array_size);
 	  void sendAliveMessage(IPAddress ip,boolean state);
 	  void sendAliveMessage(IPAddress ip);
 	private:

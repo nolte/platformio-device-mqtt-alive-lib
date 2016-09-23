@@ -6,6 +6,10 @@
 #include <PubSubClient.h>
 #include <MqttDeviceAlliveMessage.h>
 
+#if !defined(ARRAY_SIZE)
+    #define ARRAY_SIZE(x) (sizeof((x)) / sizeof((x)[0]))
+#endif
+
 // MAC Adresse des Ethernet Shields
 byte mac[] = { 0xDE, 0xED, 0xBA, 0xFE, 0xFE, 0xFF };
 // Device IP Address
@@ -22,7 +26,7 @@ char MQTT_A_LIVE_TOPIC[] = "/iot/devices";
 const char *features[] = { "ir-command-receiving" };
 
 MqttDeviceAlliveMessage aliveMessage(mqttClient, MQTT_A_LIVE_TOPIC, DEVICE_ID,
-		features);
+		features,ARRAY_SIZE(features));
 
 const long _interval = 5000;
 unsigned long previousMillis = 0;

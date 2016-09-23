@@ -4,10 +4,6 @@
 #include <ArduinoJson.h>
 #include "MqttDeviceAlliveMessage.h"
 
-#if !defined(ARRAY_SIZE)
-    #define ARRAY_SIZE(x) (sizeof((x)) / sizeof((x)[0]))
-#endif
-
 String DisplayAddress(IPAddress address)
 {
   return String(address[0]) + "." +
@@ -25,13 +21,13 @@ MqttDeviceAlliveMessage::MqttDeviceAlliveMessage(PubSubClient client,const char*
   _device_id = device_id;
 }
 
-MqttDeviceAlliveMessage::MqttDeviceAlliveMessage(PubSubClient client,const char* mqtt_topic,char* device_id,const char** features)
+MqttDeviceAlliveMessage::MqttDeviceAlliveMessage(PubSubClient client,const char* mqtt_topic,char* device_id,const char** features,int feature_array_size)
 {
   _client = client;
   _mqtt_topic = mqtt_topic;
   _device_id = device_id;
   _features = features;
-  _feature_array_size = ARRAY_SIZE(features);
+  _feature_array_size = feature_array_size;
 }
 
 void MqttDeviceAlliveMessage::sendAliveMessage(IPAddress ip,boolean state)
