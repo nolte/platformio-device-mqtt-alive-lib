@@ -22,5 +22,5 @@
 		}
 	],
 	"frameworks": "arduino",
-	"platforms": "atmelavr"
+	"platforms": "atmelavr, espressif"
 }
