@@ -38,7 +38,7 @@ void reconnect() {
 			Serial.println("connected");
 		} else {
 			Serial.print("failed, rc=");
-			Serial.print(client.state());
+			Serial.print(mqttClient.state());
 			Serial.println(" try again in 5 seconds");
 			// Wait 5 seconds before retrying
 			delay(5000);
@@ -61,9 +61,8 @@ void loop() {
 	if (!mqttClient.connected()) {
 		reconnect();
 	}
-	mqttClient.loop()
+	mqttClient.loop();
 	aliveMessage.sendAliveMessage(ip);
 	delay(60000);
 
-}
 }
