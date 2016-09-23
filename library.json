@@ -1,6 +1,6 @@
 {
 	"name": "MQTT Device Alive",
-	"version": "0.9.0",
+	"version": "0.9.5",
 	"keywords": "mqtt, monitoring, alive",
 	"description": "Send all 30 seconds a JSon Message",
 	"repository": {
