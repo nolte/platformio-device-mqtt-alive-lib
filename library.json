@@ -18,5 +18,9 @@
 		}
 	],
 	"frameworks": "arduino",
-	"platforms": "atmelavr, espressif"
+	"examples": "examples/*/*.ino",
+        "platforms": [
+        		"atmelavr",
+        		"espressif"
+    		]
 }
