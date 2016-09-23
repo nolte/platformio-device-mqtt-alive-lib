@@ -61,7 +61,7 @@ void loop() {
 	if (!mqttClient.connected()) {
 		reconnect();
 	}
-	mqttClient.loop()
+	mqttClient.loop();
 	aliveMessage.sendAliveMessage(ip);
 	delay(60000);
 
