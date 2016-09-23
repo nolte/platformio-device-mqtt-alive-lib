@@ -14,7 +14,7 @@ IPAddress ip(192, 168, 178, 4);
 // IP des MQTT Servers
 IPAddress mqttBroker(192, 168, 178, 63);
 // using build parameter for mqtt device id
-char DEVICE_ID[] = MQTTDEVICEID;
+char DEVICE_ID[] = "MQTTDEVICEID";
 
 EthernetClient ethClient;
 PubSubClient mqttClient(ethClient);
@@ -51,7 +51,7 @@ void setup() {
 
 void loop() {
 	long now = millis();
-	if (!mqttClient.connected()) {
+	if (!mqttClient.connected(DEVICE_ID)) {
 		// reconnect to the broker
 		if (now - lastReconnectAttempt > 5000) {
 			lastReconnectAttempt = now;
